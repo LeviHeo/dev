@@ -1,7 +1,7 @@
 
 var articleList = [{
     episode: 1,
-    video: "zvHf0ZwDvvw",
+    video: "zUs3nkN_QAk",
     series:[{
         article: [{
             link: "https://multimedia.scmp.com/news/hong-kong/article/3180749/subdivided-units-part1/index.html?module=series_page&pgtype=series&campagin=Life%20in%20Hong%20Kong%E2%80%99s%20worst%20living%20spaces:%20from%20cage%20homes%20to%20subdivided%20flats",
@@ -88,7 +88,7 @@ var articleList = [{
 
 window.addEventListener("keydown", function(e) {
     if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
-        e.preventDefault();
+        if (e.cancelable) e.preventDefault();
     }
 }, false);
 
@@ -111,10 +111,41 @@ var SCMP = new Vue({
     mounted:function(){
         this.placeVideo(this.articles);
         this.setScrollAni();
-        $(window).resize(function(){
-            //ScrollTrigger.refresh();
-            SCMP.getWindowSize([$(window).width(), $(window).height()]);
+
+        var lastScrollTop = 0;
+        $(window).scroll(function(event) {
+            var el = $("#kv"),
+                top_of_element    = el.offset().top,
+                bottom_of_element = el.offset().top + el.outerHeight(),
+                bottom_of_screen  = $(window).scrollTop() + $(window).innerHeight(),
+                top_of_screen     = $(window).scrollTop();
+
+            if ((bottom_of_screen > top_of_element) && (top_of_screen < bottom_of_element/2)){
+                $('.scmp-backtotop').addClass('pos-top');
+                $('#kv').removeClass('ani-pause');
+            }else {
+                $('#kv').addClass('ani-pause');
+            }
+            //var blurVal = top_of_screen*0.006;
+            var blurVal = top_of_screen*0.010;
+            if(blurVal < 5) {
+                $('.kv-bg').css('filter', 'blur('+blurVal+'px)');
+                return false;
+            }
+
+            var st = $(this).scrollTop();
+            if (st > lastScrollTop){
+                $('.scmp-backtotop').addClass('pos-top');
+            } else {
+                $('.scmp-backtotop').removeClass('pos-top');
+            }
+            lastScrollTop = st;
         });
+
+        /* $(window).resize(function(){
+            ScrollTrigger.refresh();
+            SCMP.getWindowSize([$(window).width(), $(window).height()]);
+        }); */
     },
     watch:{
         isMob:function(val){
@@ -125,41 +156,12 @@ var SCMP = new Vue({
     },
     methods:{
         setScrollAni:function(){
-            // Progress
-            var lastScrollTop = 0;
-            $(window).scroll(function(event) {
-                var el = $("#kv"),
-                    top_of_element    = el.offset().top,
-                    bottom_of_element = el.offset().top + el.outerHeight(),
-                    bottom_of_screen  = $(window).scrollTop() + $(window).innerHeight(),
-                    top_of_screen     = $(window).scrollTop();
-
-                if ((bottom_of_screen > top_of_element) && (top_of_screen < bottom_of_element/2)){
-                    $('.scmp-backtotop').addClass('pos-top');
-                    $('#kv').removeClass('ani-pause');
-                }else {
-                    $('#kv').addClass('ani-pause');
-                }
-                //var blurVal = top_of_screen*0.006;
-                var blurVal = top_of_screen*0.010;
-                if(blurVal < 5) {
-                    $('.kv-bg').css('filter', 'blur('+blurVal+'px)');
-                    return false;
-                }
-
-                var st = $(this).scrollTop();
-                if (st > lastScrollTop){
-                    $('.scmp-backtotop').addClass('pos-top');
-                } else {
-                    $('.scmp-backtotop').removeClass('pos-top');
-                }
-                lastScrollTop = st;
-            });
 
             var morethanTitle, morethanDesc, morethanBg, videoandarticle;
             morethanTitle = new Swiper(".kewords", {
                 direction: "vertical",
                 allowTouchMove: false,
+                simulateTouch:false,
                 on:{
                     init:function(){
                         $('.title-first, .morethan-desc, .morethan-title-logo').addClass('active');
@@ -173,12 +175,14 @@ var SCMP = new Vue({
 
             morethanDesc = new Swiper(".morethandesc", {
                 allowTouchMove: false,
+                simulateTouch:false,
                 effect: "fade",
                 mousewheel: false,
             });
 
             morethanBg = new Swiper(".morethanbg", {
                 allowTouchMove: false,
+                simulateTouch:false,
                 effect: "fade",
                 speed:3000,
                 mousewheel: false,
@@ -194,18 +198,19 @@ var SCMP = new Vue({
                 $('.kewords').css('width', toW+'px')
             });
 
+            setTimeout(function(){
+                var timelineBar = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: "body",
+                        scrub: 0.3,
+                        start: "top top",
+                        end: "bottom bottom",
+                    }
+                });
 
-            var timelineBar = gsap.timeline({
-                scrollTrigger: {
-                trigger: "body",
-                scrub: 0.3,
-                start: "top top",
-                end: "bottom bottom",
-                }
-            });
-
-            timelineBar.to('#progress span', { width: '100%', ease: 'none' }, 0)
-            .to('#progress', { duration: 0.01, opacity: 1, ease: 'none' }, 0);
+                timelineBar.to('#progress span', { width: '100%', ease: 'none' }, 0)
+                .to('#progress', { duration: 0.01, opacity: 1, ease: 'none' }, 0);
+            }, 500)
 
             function videoPlay(status){
                 var url = $('.video-holder[data-video=1]').find('iframe').attr('src');
@@ -226,16 +231,16 @@ var SCMP = new Vue({
                 prevent: e => e.preventDefault(),
                 disable() {
                     if (scrolling.enabled) {
-                    scrolling.enabled = false;
-                    window.addEventListener("scroll", gsap.ticker.tick, {passive: true});
-                    scrolling.events.forEach((e, i) => (i ? document : window).addEventListener(e, scrolling.prevent, {passive: false}));
+                        scrolling.enabled = false;
+                        window.addEventListener("scroll", gsap.ticker.tick, {passive: true});
+                        scrolling.events.forEach((e, i) => (i ? document : window).addEventListener(e, scrolling.prevent, {passive: false}));
                     }
                 },
                 enable() {
                     if (!scrolling.enabled) {
-                    scrolling.enabled = true;
-                    window.removeEventListener("scroll", gsap.ticker.tick);
-                    scrolling.events.forEach((e, i) => (i ? document : window).removeEventListener(e, scrolling.prevent));
+                        scrolling.enabled = true;
+                        window.removeEventListener("scroll", gsap.ticker.tick);
+                        scrolling.events.forEach((e, i) => (i ? document : window).removeEventListener(e, scrolling.prevent));
                     }
                 }
             };
@@ -247,27 +252,30 @@ var SCMP = new Vue({
                     scrollCnt=0;
                 }, 1000);
             }
+
             function goToSection(section, anim, i) {
-                if (scrolling.enabled && document.readyState === 'complete') { // skip if a scroll tween is in progress
+                if (scrolling.enabled && document.readyState === 'complete') {
                     if(!SCMP.backtotop) {
-                        scrollCnt++;
-                        cntScrollMove();
+                        //scrollCnt++;
+                        //cntScrollMove();
                         gsap.set("body", {overflow: "hidden"});
                         scrolling.disable();
+
+                       /*  $('html, body').animate({
+                            scrollTop:$(section).offset().top
+                        }, 1000, function(){
+                            scrolling.enable();
+                            gsap.set("body", {overflow: "auto"});
+                        }); */
+
                         gsap.to(window, {
                             scrollTo: {y: section, autoKill: false},
                             duration: 1,
                             onComplete:function(){
-                                //console.log(scrollCnt);
-                                if(scrollCnt == 2) {
-                                    location.reload();
-                                }
-                                scrollCnt=0;
-                                //console.log(scrollCnt);
                                 setTimeout(function(){
                                     scrolling.enable();
                                     gsap.set("body", {overflow: "auto"});
-                                }, 1);
+                                }, 1000);
                             },
                         });
                         anim && anim.restart();
@@ -275,85 +283,71 @@ var SCMP = new Vue({
                 }
             }
 
-            gsap.to('.bg-item', {opacity:0, scale:1, duration:0.5});
-            sections.forEach((section, i) => {
-                ScrollTrigger.create({
-                trigger: section,
-                start: "top bottom",
-                end: "bottom top",
-                onEnter:function(){
-                    scrolling.enable();
-                    morethanTitle.slideTo(i, 1000);
-                    morethanDesc.slideTo(i, 1000);
-                    //morethanBg.slideTo(i, 3000);
-                    goToSection(section);
+            // gsap.utils.toArray(".bg-item").forEach(function(item, i){
+            //     gsap.to(item, {opacity:0, scale:1, duration:0.5});
+            // });
 
-                    if($('.bg-item:nth-child('+(i)+')').length > 0) {
-                        gsap.to('.bg-item:nth-child('+(i)+')', {opacity:0, scale:1, duration: 2})
-                    }
-                    if($('.bg-item:nth-child('+(i+1)+')').length > 0) {
-                        gsap.to('.bg-item:nth-child('+(i+1)+')', {opacity:1, scale:1.02, duration: 2})
-                    }
-                },
-                onEnterBack:function(){
-                    morethanTitle.slideTo(i, 1000);
-                    morethanDesc.slideTo(i, 1000);
-                    //morethanBg.slideTo(i, 3000);
-                    goToSection(section);
+            gsap.utils.toArray("section").forEach(function(section, i){
+                if($(section).find('.panel').length > 0) {
+                    gsap.timeline({
+                        scrollTrigger: {
+                            trigger: section,
+                            start: "top bottom",
+                            end: "bottom top",
+                            onEnter:function(){
+                                scrolling.enable();
+                                morethanTitle.slideTo(i, 1000);
+                                morethanDesc.slideTo(i, 1000);
+                                $('.bg-item').removeClass('active');
+                                $('.bg-item:nth-child('+(i+1)+')').addClass('active');
+                                goToSection(section);
+                            },
+                            onEnterBack:function(){
+                                morethanTitle.slideTo(i, 1000);
+                                morethanDesc.slideTo(i, 1000);
+                                $('.bg-item').removeClass('active');
+                                $('.bg-item:nth-child('+(i+1)+')').addClass('active');
+                                goToSection(section);
+                            },
+                        }
+                    });
 
-                    if($('.bg-item:nth-child('+(i+1)+')').length > 0) {
-                        gsap.to('.bg-item:nth-child('+(i+1)+')', {opacity:1, scale:1.02, duration: 2})
-                    }
-                    if($('.bg-item:nth-child('+(i+2)+')').length > 0) {
-                        gsap.to('.bg-item:nth-child('+(i+2)+')', {opacity:0, scale:1, duration: 2})
-                    }
-                },
-                onUpdate: function(self){
-                    if(i == 4) {
-                        if(self.direction === -1) {
-                            //--showAnim.reverse();
-                        }else {
-                            //showAnim.play();
-                        }
-                    }else if(i == 0) {
-                        if(self.direction === -1) {
-                            //--showAnim.reverse();
-                        }else {
-                            //showAnim.play();
-                        }
-                    }else {
-                        if(self.direction === -1) {
-                            //showAnim.play();
-                        }else {
-                            //showAnim.reverse();
-                        }
-                    }
                 }
-                });
             });
 
-
-            var sectionBtm;
-            gsap.utils.toArray(".area-conntent-btm").forEach(function(section){
-                sectionBtm = gsap.timeline({
+            gsap.utils.toArray("#videos").forEach(function(section){
+                gsap.timeline({
                     scrollTrigger: {
                         trigger: section,
-                        start:"top 80%",
-                        end: "bottom bottom",
+                        start:"top bottom",
+                        end: "bottom top",
                         onEnter:function(){
-                            //showAnim.reverse();
                             $('.main-message').addClass('disable');
-                            goToSection(section);
-                            videoPlay('play');
+                            $('.morethan-bg').addClass('disable');
                             $('#scmp-app').addClass('show-logo');
+                            videoPlay('play');
+                            goToSection('.area-conntent-btm');
                         },
                         onLeaveBack:function(){
                             $('.main-message').removeClass('disable');
+                            $('.morethan-bg').removeClass('disable')
                             $('#scmp-app').removeClass('show-logo');
                         }
                     }
                 });
             });
+
+            gsap.utils.toArray(".morethan-bg").forEach(function(item){
+                gsap.timeline({
+                    scrollTrigger: {
+                        trigger: "#scmp-app",
+                        start:"top top",
+                        end: "bottom bottom",
+                        pin:'.morethan-bg-inner',
+                    }
+                });
+            });
+            
 
             // Desktop Mobile Seperate
             var size = this.ww > 752 ? "desktop" : "mobile";
@@ -439,6 +433,7 @@ var SCMP = new Vue({
             responsiveImg();
             $(window).resize(function(){
                 responsiveImg();
+                ScrollTrigger.refresh();
             });
 
             $('.scmp-backtotop a').on('click', function(e){
@@ -451,6 +446,7 @@ var SCMP = new Vue({
 
                 setTimeout(function(){
                     SCMP.backtotop = false;
+                    ScrollTrigger.refresh();
                 }, 1000);
             });
             $(window).resize(function(){
@@ -520,11 +516,6 @@ var SCMP = new Vue({
 
             return false;
         },
-        gotoSection:function(target){
-            $('html, body').animate({
-                scrollTop:$(target).offset().top
-            }, 500);
-        },
         getWindowSize:function(val){
             if(val) {
                 this.ww = val[0];
@@ -546,7 +537,7 @@ var SCMP = new Vue({
                 var vid = new Number($(this).data('video')) - 1;
                 var holder = $(this).find('.video-holder-inner');
                 var videoframe;
-                videoframe = "<iframe type=\"text/html\" src=\"https://www.youtube.com/embed/"+list[vid].video+"?autoplay=0&controls=1&mute=1&playsinline=1&rel=0\" frameborder=\"0\" allow=\"autoplay\"></iframe>";
+                videoframe = "<iframe type=\"text/html\" src=\"https://www.youtube-nocookie.com/embed/"+list[vid].video+"?autoplay=0&controls=1&mute=1&playsinline=1&rel=0\" frameborder=\"0\" allow=\"autoplay\"></iframe>";
                 holder.append(videoframe);
             });
         },

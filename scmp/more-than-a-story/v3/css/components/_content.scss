@@ -6,6 +6,10 @@
     display: none;
   }
 
+body, html {
+    background-color: #000000;
+}
+
 #scmp-app {
     background-color: #000000;
     color:#ffffff;
@@ -26,6 +30,7 @@
         }
     }
     .panel {
+        width:100vw;
         height:100vh;
     }
 }
@@ -107,12 +112,10 @@
     }
 }
 
-
-
 .main-message {
     position: fixed;
     width:100%;
-    height:100vh;
+    height:100%;
     z-index: 99;
     overflow: hidden;
 
@@ -153,6 +156,9 @@
 
     @include ani-select(opacity 1s ease-in-out);
 }
+
+// .main-message, .morethan-desc, .morethan-title, .morethan-bg
+
 
 .morethan-desc {
     position: relative;
@@ -258,6 +264,7 @@
     .title-first {
         display: flex;
         justify-content: center;
+        font-weight: bold;
         > div {
             position: relative;
             top:10px;
@@ -338,15 +345,32 @@
     }
 }
 
+.area-content {
+    section {
+        background: none !important;
+        .panel {
+            background: none !important;
+        }
+    }
+}
 .morethan-bg {
-    position: fixed;
+    //position: fixed;
+    position: absolute;
+    z-index: 0;
     top:0;
     left:0;
-    z-index: 0;
     width:100%;
     height:100%;
+
     overflow:hidden;
     pointer-events: none !important;
+
+    
+
+    @include ani-select(opacity 1s ease-in-out);
+    &.disable {
+        opacity: 0;
+    }
     .morethan-bg-inner {
         position: relative;
         width:100%;
@@ -359,21 +383,80 @@
     }
 
     .bg-item {
+        pointer-events: none;
         position: absolute;
         z-index: 0;
-        width:100%;
+        top:0;
+        left:0;
+        width:100vw;
         height:100vh;
+        opacity: 0.05;
+        @include ani-select(opacity 1s ease-in-out);
         &:nth-child(1) {
-            z-index: 10;
+            position: relative !important;
+            z-index: 6;
+        }
+        &:nth-child(2) {
+            z-index: 4;
+        }
+        &:nth-child(3) {
+            z-index: 2;
+        }
+        &:nth-child(4) {
+            z-index: 0;
         }
 
         .bg-item-inner {
-            position: relative;
+            /* opacity: 0;
+            @include ani-select(opacity 1s ease-in-out); */
+            @include wh100;
+            @include ani-select(background-size 10s ease-in-out);
+            &.bg01 {
+                background: url('#{$img}bg_01.jpg') center center no-repeat;
+                background-size: 100% auto;
+
+                @include media($mobile){
+                    background: url('#{$img}bg_01_mo.jpg') center center no-repeat;
+                    background-size: auto 100%;
+                }
+            }
+
+            &.bg02 {
+                background: url('#{$img}bg_02.jpg') center center no-repeat;
+                background-size: 100% auto;
+
+                @include media($mobile){
+                    background: url('#{$img}bg_02_mo.jpg') center center no-repeat;
+                    background-size: auto 100%;
+                }
+            }
+
+            &.bg03 {
+                background: url('#{$img}bg_03.jpg') center center no-repeat;
+                background-size: 100% auto;
+
+                @include media($mobile){
+                    background: url('#{$img}bg_03_mo.jpg') center center no-repeat;
+                    background-size: auto 100%;
+                }
+            }
+
+            &.bg04 {
+                background: url('#{$img}bg_04.jpg') center center no-repeat;
+                background-size: 100% auto;
+
+                @include media($mobile){
+                    background: url('#{$img}bg_04_mo.jpg') center center no-repeat;
+                    background-size: auto 100%;
+                }
+            }
+
+            /* position: relative;
             overflow: hidden;
             top:50%;
             left:50%;
             @media (orientation: landscape) {
-                width:100vw;
+                width:100%;
                 transform: translateX(-50%) translateY(-50%) scale(1);
             }
             @media (orientation: portrait) {
@@ -392,8 +475,22 @@
                     width:auto;
                     height:100%;
                 }
+            } */
+        }
+
+        &.active {
+            opacity: 1;
+            z-index: 10;
+            .bg-item-inner {
+                /* opacity: 1; */
+                background-size: 104% auto;
+
+                @include media($mobile){
+                    background-size: auto 104%;
+                }
             }
         }
+
         img {
             transform:scale(1);
             // width:100%;
@@ -1109,7 +1206,7 @@ section {
                 .article-lists-inner {
                     left:0%;
                     @include media(1440px){
-                        left:-2%;    
+                        left:-2%;
                     }
                 }
             }
@@ -1140,4 +1237,11 @@ section {
             }
         }
     }
+}
+
+
+.blankimg {
+    display: block;
+    width:100%;
+    height:100%;
 }

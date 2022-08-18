@@ -1,6 +1,6 @@
 
-@import "./components/reset";
 @import "./components/fonts";
+@import "./components/reset";
 @import "./components/mixin";
 @import "./components/setting";
 @import "./components/header";
@@ -143,6 +143,5 @@ html{
         user-select: none; */
     }
 }
-
-@import "./components/content";
 @import "./components/swiper";
+@import "./components/content";
