@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>300x600</title>
+    <meta name="ad.size" content="width=300,height=600" />
+    <style type="text/css" media="screen">
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+            -ms-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .smooth {
+            -webkit-transform: translate3d(0, 0, 0);
+            -moz-transform: translate3d(0, 0, 0);
+            -ms-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+        }
+
+        .ad img,
+        .banner img,
+        .banner svg {
+            position: absolute;
+            border: none;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+            -ms-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        .ad div,
+        .banner div {
+            position: absolute;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .ad,
+        .banner {
+            position: absolute;
+            width: 300px;
+            height: 600px;
+            overflow: hidden;
+            margin: 0 auto;
+            z-index: 0;
+        }
+
+        .ad {
+            border-width: 0;
+            border-style: solid;
+            background-color: rgba(255, 255, 255, 1);
+            background-image: url('loading.gif');
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .banner {
+            opacity: 0;
+            background-color: rgba(0, 0, 0, 1);
+            background-position: center;
+            background-repeat: no-repeat;
+            -webkit-background-size: auto;
+            background-size: auto;
+        }
+
+        .full {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0);
+        }
+
+        .hidden {
+            opacity: 0;
+        }
+
+        .border {
+            border-width: 1px;
+            border-style: solid;
+            border-color: #000000;
+        }
+
+        .clickTag {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+        }
+        
+        /* CSS Custom */
+        .img_full{
+            width: 100%;
+            height: auto;
+        }
+        .transformLeft {
+            transform: translateX(-100%);
+            -webkit-transform: translateX(-100%);
+            -moz-transform: translateX(-100%);
+            -ms-transform: translateX(-100%);
+        }
+        .transformRight {
+            transform: translateX(100%);
+            -webkit-transform: translateX(100%);
+            -moz-transform: translateX(100%);
+            -ms-transform: translateX(100%);
+        }
+        .clock_face, .clock_border {
+            transform: translateY(26px) scale(1.09);
+            -webkit-transform: translateY(26px) scale(1.09);
+            -moz-transform: translateY(26px) scale(1.09);
+            -ms-transform: translateY(26px) scale(1.09);
+            transform-origin: center 270px;
+            -webkit-transform-origin: center 270px;
+            -moz-transform-origin: center 270px;
+            -ms-transform-origin: center 270px;
+        }
+        .clock_border {
+            width: 400px;
+            height: auto;
+            left: -50px;
+        }
+
+        .black {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #000;
+        }
+    </style>
+    <script type="text/javascript">
+        !function(n){n.preloadImages=function(n,o){window.IMAGES_CACHE={};var e,t,i=n.length;if(0===n.length)return void(o&&"function"==typeof o&&o());for(;e=n.pop();)t=new Image,t.onload=function(n){window.IMAGES_CACHE[n]=this,i--,0===i&&(console.log("All images are ready..."),o&&"function"==typeof o&&o())}.bind(t,e),t.src=e},n.loadScripts=function(n,o){var e,t,i=n.length;if(0===n.length)return void(o&&"function"==typeof o&&o());for(;e=n.pop();)t=document.createElement("script"),t.defer=!0,t.onload=function(){i--,0===i&&(console.log("All scripts are ready..."),o&&"function"==typeof o&&o())},t.src=e,document.getElementsByTagName("head")[0].appendChild(t)}}(window);
+    </script>
+    <script type="text/javascript">
+        var clickTag = ""; 
+    </script>
+</head>
+<body>
+    <div id="ad" class="ad js-ad">
+        <div id="banner" class="banner js-banner">
+            <img src="clock_first.jpg" class="clock_first js-clock_first img_full hidden">
+            <img src="clock_face.jpg" class="clock_face js-clock_face img_full hidden">
+
+            <img src="clock_border1.png" class="clock_border js-clock_border js-clock_border1 img_full hidden">
+            <img src="clock_border2.png" class="clock_border js-clock_border js-clock_border2 img_full hidden">
+            <img src="clock_border3.png" class="clock_border js-clock_border js-clock_border3 img_full hidden">
+            <img src="clock_border4.png" class="clock_border js-clock_border js-clock_border4 img_full hidden">
+
+            <img src="mask.png" class="mask js-mask img_full">
+            <div class="black hidden js-black"></div>
+            <img src="logo_50_end.png" class="logo_50_end hidden js-logo_50_end img_full">
+            <img src="logo_50_1.png" class="logo_50_1 hidden js-logo_50_1 img_full">
+            <img src="txt.png" class="txt hidden js-txt img_full">
+            <img src="cta.png" class="cta js-cta img_full">
+            <img src="logo.png" class="logo js-logo img_full">
+            
+        </div>
+        <div class="border js-border full"></div>
+        <a href="javascript:void(window.open(window.clickTag));" id="clickTag" class="clickTag js-clickTag full"></a>
+    </div>
+    <script type="text/javascript">
+        "use strict";
+        var $BANNER = ((function() {
+            // jQuery Fake
+            var $ = function(slt) { return document.querySelector(slt); }
+            // HELPERS OBJECT
+            var HELPERS = {
+                "GSAP": {
+                    "STATUS": true,
+                    "VERSION": "",
+                    "URLS": [
+                        'https://s0.2mdn.net/ads/studio/cached_libs/tweenmax_1.19.1_92cf05aba6ca4ea5cbc62b5a7cb924e3_min.js'
+                    ]
+                },
+                "ADS": {
+                    "WIDTH": "300",
+                    "HEIGHT": "600",
+                },
+                "SCREEN": {
+                    "WIDTH" : window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth || document.body.offsetWidth,
+                    "HEIGHT": window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight || document.body.offsetHeight
+                },
+                "DOMS": {},
+                "EVENTS": {
+                    "CLICK": (function() {
+                            if ('ontouchstart' in document.documentElement === true) return 'touchstart';
+                            else return 'click';
+                          })(),
+                    "MOVE": (function() {
+                            if ('ontouchstart' in document.documentElement === true) return 'touchmove';
+                            else return 'mousemove';
+                          })()
+                },
+                "STATUS": true
+            };
+            
+            var timers = 0;
+            var Tween;
+            // Pre-load Libraries
+            function startAds() {
+                switch(HELPERS.GSAP.STATUS) {
+                    case false:
+                        console.warn("Banner " + HELPERS.ADS.WIDTH + "x" + HELPERS.ADS.HEIGHT + " (SCREEN: " + HELPERS.SCREEN.WIDTH + "x" + HELPERS.SCREEN.HEIGHT + ") can't use " + "%cGSAP", "font-weight: bold; color: blue;");
+                        loadAssets();
+                        break;
+                    default:
+                        console.warn("Banner " + HELPERS.ADS.WIDTH + "x" + HELPERS.ADS.HEIGHT + " (SCREEN: " + HELPERS.SCREEN.WIDTH + "x" + HELPERS.SCREEN.HEIGHT + ") using " + "%cGSAP", "font-weight: bold; color: green;");
+                        loadScripts(HELPERS.GSAP.URLS, loadAssets);
+                        break;
+                }
+            }
+            // Pre-load Assets
+            function loadAssets() {
+                preloadImages([
+                    "clock_border1.png",
+                    "clock_border2.png",
+                    "clock_border3.png",
+                    "clock_border4.png",
+                    "clock_face.jpg",
+                    "clock_first.jpg",
+                    "cta.png",
+                    "logo_50_1.png",
+                    "logo_50_end.png",
+                    "logo.png",
+                    "mask.png"
+                ], mainDOM);
+            }
+            // DOMs
+            function mainDOM() {
+                HELPERS.GSAP.VERSION = window.TweenMax != undefined ? window.TweenMax.version : '';
+                HELPERS.DOMS.Ad = $('.js-ad') != undefined ? $('.js-ad') : '';
+                HELPERS.DOMS.Banner = $('.js-banner') != undefined ? $('.js-banner') : '';
+                HELPERS.DOMS.ClickTag = $('.js-clickTag') != undefined ? $('.js-clickTag') : '';
+
+                addListeners();
+                // Call Show Ads
+                showAds(true, mainFunc);
+                // Handle Show Ads
+                function showAds(e, callback) {
+                    // Pre Show Elements
+                    var elsObj = [HELPERS.DOMS.Banner]; // Shounldn't empty
+                    switch (e) {
+                        case false:
+                            console.info(e);
+                            break;
+                        default:
+                            showElements(elsObj);
+                            break;
+                    }
+
+                    if (callback && typeof(callback) === "function") {
+                        callback();
+                    }
+
+                    function showElements(els) {
+                        if(els.length > 0) {
+                            for(var i=0; i<els.length; i++) {
+                                els[i].style.opacity = 1;
+                                els[i].style.display = 'block';
+                                els[i].style.visibility = 'visible';
+                            }
+                        } else {
+                            console.warn("Variable " + "%celsObj" + " %cshouldn't empty !", "font-weight: bold; color: blue;", "color:inherist");
+                        }
+                    }
+                }
+                // Handle Events
+                function addListeners(){
+                    // Use event HELPERS.EVENTS.CLICK || HELPERS.EVENTS.MOVE
+                    if (HELPERS.DOMS.ClickTag.tagName.toLowerCase() != 'a')
+                        HELPERS.DOMS.ClickTag.addEventListener(HELPERS.EVENTS.CLICK, clickTagHandle, false);
+                }
+                // Handler Events
+                function clickTagHandle(e) {
+                    if (HELPERS.DOMS.ClickTag.tagName.toLowerCase() == 'a') e.preventDefault();
+                    console.log('Banner Clicked !');
+                }
+            }
+            // To Do Animation
+            function mainFunc() {
+                switch(HELPERS.GSAP.STATUS) {
+                    case false:
+                        Tween = {};
+                        break;
+                    default:
+                        console.log("%cGSAP Version: " + "%c" + HELPERS.GSAP.VERSION, "font-weight: bold; color: green;", "color:inherist");                    
+                        console.log("%cGSAP Timeline" + " %chad created !", "font-weight: bold; color: green;", "color:inherist");
+
+                        Tween = new TimelineMax({
+                            onStart: _onStart,
+                            onUpdate: _onUpdate,
+                            onComplete: _onComplete
+                        });
+                        console.log("%cGSAP Animation" + " %cstarting ..!", "font-weight: bold; color: green;", "color:inherist");
+
+                        timers += 0.15;
+                        Tween.add(TweenMax.to(['.js-clock_first'], 1, { autoAlpha: 1, ease: Power0.easeNone }), timers);
+                        Tween.add(TweenMax.to(['.js-clock_first'], 4, { scale: 1.6, ease: Power0.easeNone }), timers);
+                        Tween.add(TweenMax.to(['.js-clock_face', '.js-clock_border'], 4, { scale: 1.7, ease: Power0.easeNone }), timers);
+                        timers += 1;
+                        Tween.add(TweenMax.to(['.js-clock_face'], 0.75, { autoAlpha: 1, ease: Power0.easeNone }), timers);
+                        timers += 1;
+                        Tween.add(TweenMax.to(['.js-clock_first'], 1, { autoAlpha: 0, ease: Power0.easeNone }), timers);
+                        Tween.add(TweenMax.to(['.js-clock_border1'], 0.1, { autoAlpha: 1, ease: Power0.easeNone }), timers);
+                        timers += 0.35;
+                        Tween.add(TweenMax.to(['.js-clock_border2'], 0.1, { autoAlpha: 1, ease: Power0.easeNone }), timers);
+                        timers += 0.35;
+                        Tween.add(TweenMax.to(['.js-clock_border3'], 0.1, { autoAlpha: 1, ease: Power0.easeNone }), timers);
+                        timers += 0.35;
+                        Tween.add(TweenMax.to(['.js-clock_border4'], 0.1, { autoAlpha: 1, ease: Power0.easeNone }), timers);
+                        timers += 0.25;
+                        Tween.add(TweenMax.to(['.js-black'], 1, { autoAlpha: 1, ease: Power0.easeNone }), timers);
+                        timers += 1;
+                        Tween.add(TweenMax.to(['.js-logo_50_1'], 0.75, { autoAlpha: 1, ease: Power0.easeNone }), timers);
+                        timers += 1.7;
+                        Tween.add(TweenMax.to(['.js-logo_50_1'], 0.75, { autoAlpha: 0, ease: Power0.easeNone }), timers);
+                        timers += 0.75;
+                        Tween.add(TweenMax.to(['.js-black'], 1, { autoAlpha: 0, ease: Power0.easeNone }), timers);
+                        Tween.add(TweenMax.to(['.js-logo_50_end', '.js-txt'], 1, { autoAlpha: 1, ease: Power0.easeNone }), timers);
+                        Tween.add(TweenMax.to(['.js-clock_face'], 1, { scale: 1, x: 0, y: 0, ease:Back.easeOut.config(3) }), timers);
+                        timers += 0.1;
+                        Tween.add(TweenMax.to(['.js-clock_border1'], 1, { scale: 1, x: 0, y: 0, ease:Back.easeOut.config(3) }), timers);
+                        timers += 0.1;
+                        Tween.add(TweenMax.to(['.js-clock_border2'], 1, { scale: 1, x: 0, y: 0, ease:Back.easeOut.config(3) }), timers);
+                        timers += 0.1;
+                        Tween.add(TweenMax.to(['.js-clock_border3'], 1, { scale: 1, x: 0, y: 0, ease:Back.easeOut.config(3) }), timers);
+                        timers += 0.1;
+                        Tween.add(TweenMax.to(['.js-clock_border4'], 1, { scale: 1, x: 0, y: 0, ease:Back.easeOut.config(3) }), timers);
+
+                        break;
+                }
+
+                // Handle Animation Timeline STEPs
+                function _onStart()    {}
+                function _onUpdate()   {}
+                function _onComplete() {}
+            }
+            return startAds;
+        })());
+
+        window.addEventListener("load", $BANNER);
+    </script>
+</body>
+</html>
